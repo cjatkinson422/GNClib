@@ -7,10 +7,11 @@ UnitTest.o: UnitTest.cpp *.hpp
 	g++ -c $(INC) UnitTest.cpp
 linalg.o: linalg.cpp *.hpp
 	g++ -c $(INC) linalg.cpp
-rotations.o: rotations.cpp *.hpp
-	g++ -c $(INC) rotations.cpp
 
-executable: linalg.o rotations.o UnitTest.o
-	g++ $(INC) -o UnitTest linalg.o rotations.o UnitTest.o
+executable: linalg.o UnitTest.o
+	g++ $(INC) -o UnitTest linalg.o UnitTest.o
+	./UnitTest
 
-clean: rm *.o 
+clean: 
+	rm UnitTest
+	rm *.o 
