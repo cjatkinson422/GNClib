@@ -232,7 +232,7 @@ public:
     static bool testEquivalence(const quaternion&, const quaternion&);
 };
 
-quaternion operator*(quaternion&, quaternion&);
+quaternion operator*(const quaternion&, const quaternion&);
 
 /******************************************************
  * 

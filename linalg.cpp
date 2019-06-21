@@ -550,7 +550,7 @@ bool quaternion::testEquivalence(const quaternion& q1, const quaternion& q2){
     QUATERNION OPERATOR OVERLOADS
 *****************************************************/
 
-quaternion operator*(quaternion& q1, quaternion q2){
+quaternion operator*(const quaternion& q1, const quaternion q2){
     quaternion r;
     r.s = q1.s*q2.s - vec3::dot(q1.v,q2.v);
     r.v = q1.s*q2.v + q2.s*q1.v - vec3::cross(q2.v,q1.v);
