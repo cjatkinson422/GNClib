@@ -60,6 +60,8 @@ bool operator==(const vec3&,const vec3&);
 bool operator!=(const vec3&,const vec3&);
 vec3 operator+ (const vec3&,const vec3&);
 vec3 operator- (const vec3&,const vec3&);
+void operator+=(vec3&,const vec3&);
+void operator-=(vec3&,const vec3&);
 vec3 operator*(const double&,const vec3&);
 vec3 operator*(const vec3&,const double&);
 

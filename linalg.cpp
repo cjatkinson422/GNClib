@@ -95,6 +95,16 @@ vec3 operator-(const vec3& v1, const vec3& v2){
     r.z = v1.z-v2.z;
     return r;
 }
+void operator+=(vec3& lhs, const vec3& rhs){
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    lhs.z += rhs.z;
+}
+void operator-=(vec3& lhs, const vec3& rhs){
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    lhs.z -= rhs.z;
+}
 vec3 operator*(const double& s, const vec3& v){
     vec3 r;
     r.x = v.x*s;
