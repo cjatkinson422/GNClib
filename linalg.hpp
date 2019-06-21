@@ -7,6 +7,7 @@
 #define PI 3.14159265358979323846264
 
 class vec3;
+class vec3f;
 class vec4;
 class mat3;
 class mat4;
@@ -120,9 +121,11 @@ public:
     /**************************************************
         FUNCTIONS
     **************************************************/
+    
+    mat3(double init = 0.0, bool identity = false);
 
-   // Orthogonalizes the matrix using the current X vector as the
-   // reference direction. Once orthogonalized, normalizes each vector
+    // Orthogonalizes the matrix using the current X vector as the
+    // reference direction. Once orthogonalized, normalizes each vector
     void orthonormalize();
     // Does a standard matrix transpose and returns the new transposed matrix
     mat3 transpose();
@@ -164,6 +167,7 @@ public:
     vec4 z;
     vec4 w;
 
+    mat4(double init = 0.0, bool identity = false);
     /**************************************************
         FUNCTIONS
     **************************************************/
@@ -210,7 +214,7 @@ public:
     // Algorith source:
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
     // Please verify and make sure I didnt make any typos @AndrewMalatak
-    mat3 toMat3() const;
+    mat3 toMat3();
 
     // Prints the contents of the quaternion
     void print() const;

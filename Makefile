@@ -1,6 +1,5 @@
 INC = -g -std=c++17
 
-
 default: executable
 
 UnitTest.o: UnitTest.cpp *.hpp

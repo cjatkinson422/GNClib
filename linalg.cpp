@@ -208,6 +208,17 @@ vec4 operator*(const vec4& v, const double& s){
 /********************************************************
     MATRIX 3 METHODS
 *********************************************************/
+mat3::mat3(double def, bool identity){
+    if(identity){
+        x = vec3(def,0.0,0.0);
+        y = vec3(0.0,def,0.0);
+        z = vec3(0.0,0.0,def);
+    }else{
+        x = vec3(def,def,def);
+        y = vec3(def,def,def);
+        z = vec3(def,def,def);
+    }
+}
 
 void mat3::orthonormalize(){
     z = vec3::cross(x,y);
@@ -342,6 +353,19 @@ mat3 operator+(const mat3& m1, const mat3& m2){
 /********************************************************
     MATRIX 4 METHODS
 *********************************************************/
+mat4::mat4(double def, bool identity){
+    if(identity){
+        x = vec4(def,0.0,0.0,0.0);
+        y = vec4(0.0,def,0.0,0.0);
+        z = vec4(0.0,0.0,def,0.0);
+        w = vec4(0.0,0.0,0.0,def);
+    }else{
+        x = vec4(def,def,def,def);
+        y = vec4(def,def,def,def);
+        z = vec4(def,def,def,def);
+        w = vec4(def,def,def,def);
+    }
+}
 
 mat4 mat4::transpose(){
     mat4 r;
@@ -467,9 +491,9 @@ vec3 quaternion::rotate (const vec3& to_rotate)const{
     return 2.0*vec3::dot(v,to_rotate)*v + (s*s - vec3::dot(v,v))*to_rotate + 2.0*s*vec3::cross(v,to_rotate);
 }
 
-mat3 quaternion::toMat3()const{
+mat3 quaternion::toMat3(){
+    this->normalize();
     mat3 r;
-
     r.x.x = 1.0 - 2.0*v.y*v.y - 2.0*v.z*v.z;
     r.x.y = 2.0*v.x*v.y - 2.0*v.z*s;
     r.x.z = 2.0*v.x*v.z + 2.0*v.y*s;
