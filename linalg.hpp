@@ -170,6 +170,9 @@ public:
     vec4 w;
 
     mat4(double init = 0.0, bool identity = false);
+
+    static mat4 TransMat(vec3);
+    static mat4 ScaleMat(double);
     /**************************************************
         FUNCTIONS
     **************************************************/

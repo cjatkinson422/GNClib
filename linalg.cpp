@@ -377,6 +377,17 @@ mat4::mat4(double def, bool identity){
     }
 }
 
+inline mat4::TransMat(vec3 dir){
+    mat4 m = mat4(1.0,true);
+    m.x.w = dir.x;
+    m.y.w = dir.y;
+    m.z.w = dir.z;
+    return m;
+}
+inline mat4::ScaleMat(double scale){
+    return mat4(scale, true);
+}
+
 mat4 mat4::transpose(){
     mat4 r;
     r.x.x = x.x;
