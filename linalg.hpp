@@ -125,6 +125,7 @@ public:
     **************************************************/
     
     mat3(double init = 0.0, bool identity = false);
+    static mat3 eye3();
 
     // Orthogonalizes the matrix using the current X vector as the
     // reference direction. Once orthogonalized, normalizes each vector
@@ -173,6 +174,7 @@ public:
 
     static mat4 TransMat(vec3);
     static mat4 ScaleMat(double);
+    static mat4 eye4();
     /**************************************************
         FUNCTIONS
     **************************************************/

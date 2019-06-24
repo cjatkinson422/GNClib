@@ -79,7 +79,6 @@ bool operator!=(const vec3& v1, const vec3& v2){
     else
         return true;
 }
-
 vec3 operator+(const vec3& v1, const vec3&v2){
     vec3 r;
     r.x = v1.x+v2.x;
@@ -87,7 +86,6 @@ vec3 operator+(const vec3& v1, const vec3&v2){
     r.z = v1.z+v2.z;
     return r;
 }
-
 vec3 operator-(const vec3& v1, const vec3& v2){
     vec3 r;
     r.x = v1.x-v2.x;
@@ -228,6 +226,10 @@ mat3::mat3(double def, bool identity){
         y = vec3(def,def,def);
         z = vec3(def,def,def);
     }
+}
+inline mat3 mat3::eye3(){
+    mat3 m = mat3(1.0,true);
+    return m;
 }
 
 void mat3::orthonormalize(){
@@ -377,15 +379,19 @@ mat4::mat4(double def, bool identity){
     }
 }
 
-inline mat4::TransMat(vec3 dir){
+inline mat4 mat4::TransMat(vec3 dir){
     mat4 m = mat4(1.0,true);
     m.x.w = dir.x;
     m.y.w = dir.y;
     m.z.w = dir.z;
     return m;
 }
-inline mat4::ScaleMat(double scale){
+inline mat4 mat4::ScaleMat(double scale){
     return mat4(scale, true);
+}
+inline mat4 mat4::eye4(){
+    mat4 m = mat4(1.0,true);
+    return m;
 }
 
 mat4 mat4::transpose(){
