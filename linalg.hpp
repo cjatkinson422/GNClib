@@ -173,8 +173,6 @@ public:
 
     mat4(double init = 0.0, bool identity = false);
 
-    static mat4 TransMat(vec3);
-    static mat4 ScaleMat(double);
     static mat4 eye4();
     /**************************************************
         FUNCTIONS
@@ -200,7 +198,6 @@ class quaternion{
 public:
     double s = 1.0;
     vec3 v;
-
 
     // Default constructor 
     quaternion() : quaternion(0.0,0.0,0.0,1.0){};
@@ -248,3 +245,11 @@ const double rad2deg(double);
 
 // Converts degrees to radians
 const double deg2rad(double);
+
+
+namespace graphics{
+    mat4 transMat(vec3 pos);
+    mat4 scaleMat(double scale);
+    mat4 projectionMat(double fovy, double aspect, double nearClip, double farClip);
+    mat4 orthographicMat(double left, double right, double bottom, double top, double zNear, double zFar);
+}

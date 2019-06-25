@@ -393,21 +393,10 @@ mat4::mat4(double def, bool identity){
     }
 }
 
-inline mat4 mat4::TransMat(vec3 dir){
-    mat4 m = mat4(1.0,true);
-    m.x.w = dir.x;
-    m.y.w = dir.y;
-    m.z.w = dir.z;
-    return m;
-}
-inline mat4 mat4::ScaleMat(double scale){
-    return mat4(scale, true);
-}
 inline mat4 mat4::eye4(){
     mat4 m = mat4(1.0,true);
     return m;
 }
-
 mat4 mat4::transpose(){
     mat4 r;
     r.x.x = x.x;
@@ -431,7 +420,6 @@ mat4 mat4::transpose(){
     r.w.w = w.w;
     return r;
 }
-
 mat3 mat4::shrink(){
     mat3 r;
     r.x = x.shrink();
@@ -589,4 +577,45 @@ const double rad2deg(double rad){
 
 const double deg2rad(double deg){
     return deg * PI / 180.0;
+}
+
+
+/******************************************************
+ * 
+ *              GRAPHICS FUNCTIONS
+ * 
+******************************************************/
+inline mat4 graphics::transMat(vec3 dir){
+    mat4 m = mat4(1.0,true);
+    m.x.w = dir.x;
+    m.y.w = dir.y;
+    m.z.w = dir.z;
+    return m;
+}
+inline mat4 graphics::scaleMat(double scale){
+    return mat4(scale, true);
+}
+inline mat4 graphics::projectionMat(double fovy, double aspect, double nearClip, double farClip) {
+	mat4 ret(0.0);
+	double tanHalf = tan(fovy / 2.0);
+
+	ret.x.y = 1.0 / (aspect*tanHalf); // n/t
+	ret.y.z = 1.0 / tanHalf; // n/r
+	ret.z.x = -(farClip + nearClip) / (farClip - nearClip);
+	ret.z.w = -(2 * farClip*nearClip) / (farClip - nearClip);
+
+	ret.w.x = -1.0;
+	return ret;
+}
+inline mat4 graphics::orthographicMat(double left, double right, double bottom, double top, double zNear, double zFar) {
+	mat4 ret = mat4::eye4();
+	ret.x.x = 2.0 / (right - left);
+	ret.y.y = 2.0 / (top - bottom);
+	ret.z.z = -2.0 / (zFar - zNear);
+
+	ret.x.w = -(right + left) / (right - left);
+	ret.y.w = -(top + bottom) / (top - bottom);
+	ret.z.w = -(zFar + zNear) / (zFar - zNear);
+
+	return ret;
 }
