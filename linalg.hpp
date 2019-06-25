@@ -38,6 +38,7 @@ public:
 
     // Normalizes this vector.
     void normalize();
+    static vec3 normalize(const vec3&);
     // Returns the current length of the vector.
     double length();
     // Crosses two vec3's and returns a new vec3 with the result
@@ -62,8 +63,8 @@ vec3 operator+ (const vec3&,const vec3&);
 vec3 operator- (const vec3&,const vec3&);
 void operator+=(vec3&,const vec3&);
 void operator-=(vec3&,const vec3&);
-vec3 operator*(const double&,const vec3&);
-vec3 operator*(const vec3&,const double&);
+vec3 operator* (const double&,const vec3&);
+vec3 operator* (const vec3&,const double&);
 
 class vec4{
 public:

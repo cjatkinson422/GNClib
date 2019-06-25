@@ -32,6 +32,20 @@ void vec3::normalize(){
     }
 }
 
+vec3 vec3::normalize(const vec3& v){
+    vec3 r = v;
+    double s = sqrt(r.x*r.x + r.y*r.y + r.z*r.z);
+    if(s<1e-8){
+        r.x=0.0; r.y=0.0; r.z=0.0;
+    }
+    else{
+        r.x /= s;
+        r.y /= s;
+        r.z /= s;        
+    }
+    return r;
+}
+
 double vec3::length(){
     return sqrt(x*x + y*y + z*z);
 }

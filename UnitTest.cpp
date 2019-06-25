@@ -9,6 +9,11 @@
 
 
 int main(){
+    // Temporary testing area
+    //#################################
+
+    //##################################
+
     vec3 v1= vec3(1,0,4);
     vec3 v2= vec3(3,1,0);
     bool fail = false;
@@ -116,6 +121,9 @@ int main(){
             break;
         }
     }
+
+    // Determines how long it takes to cast 1e6 doubles to floats. 
+    //############################################################
     double d = 102385098220.9235235;
     clock_t time = clock();
     for (unsigned long int i = 0; i < 1000000; ++i){
@@ -123,7 +131,17 @@ int main(){
     }
     time = clock() - time;
     double t = (double)time / CLOCKS_PER_SEC;
-    printf("1,000,000 float casts took %lf seconds \n", t);
+
+    time = clock();
+    for (unsigned long int i = 0; i < 1000000; ++i){
+        double f = d;
+    }
+    time = clock() - time;
+    t = t - ((double)time / CLOCKS_PER_SEC);
+    printf("1,000,000 float casts took %lf seconds \n", t); 
+    //############################################################
+
+    
 
     // Print to screen if all unit tests successful
     if(!fail){

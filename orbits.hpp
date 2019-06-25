@@ -1,8 +1,9 @@
 #include "linalg.hpp"
 
-class keplerianOrbit{
+class KeplerianOrbit{
 public:
     // Contained data
+    double specific_gravity = 0.0;
     double major_axis = 0.0;
     double eccentricity = 0.0;
     double inclination = 0.0;
@@ -11,7 +12,8 @@ public:
     double mean_anomaly = 0.0;
     double true_anomaly = 0.0;
 
-    keplerianOrbit(vec3,vec3);
-    keplerianOrbit(double,double,double,double,double,double);
+    KeplerianOrbit(vec3,vec3,double);
+    KeplerianOrbit(double,double,double,double,double,double);
+
 
 };
