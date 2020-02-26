@@ -74,6 +74,8 @@ public:
     double y;
     double z;
     double w;
+
+    double operator[](unsigned int);
     
     // Default constructor
     vec4() : vec4(0.0,0.0,0.0,0.0){};
