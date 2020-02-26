@@ -374,8 +374,9 @@ mat3 operator+(const mat3& m1, const mat3& m2){
 const double* operator&(const mat3& m){
     return &m.x;
 }
-vec3 mat3::operator[](unsigned int){
+vec3 mat3::operator[](unsigned int i){
     if(i>2) exit(-1);
+    return *()
 }
 
 /*****************************************************
