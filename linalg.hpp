@@ -17,6 +17,8 @@ public:
     double x;
     double y;
     double z;
+
+    double operator[](unsigned int);
     
     // Default constructor
     vec3() : vec3(0.0,0.0,0.0){};
@@ -37,6 +39,7 @@ public:
 
     // Normalizes this vector.
     void normalize();
+    static vec3 normalize(vec3&);
     // Returns the current length of the vector.
     double length();
     // Crosses two vec3's and returns a new vec3 with the result
@@ -53,6 +56,8 @@ public:
     // Prints the contents of the vector with a newline terminator
     void println();
 
+    double getAngularDist(vec3& v1, vec3& v2);
+
 };
 // Operator overloads
 bool operator==(const vec3&,const vec3&);
@@ -61,6 +66,7 @@ vec3 operator+ (const vec3&,const vec3&);
 vec3 operator- (const vec3&,const vec3&);
 vec3 operator*(const double&,const vec3&);
 vec3 operator*(const vec3&,const double&);
+const double* operator&(const vec3&);
 
 class vec4{
 public:
@@ -106,7 +112,7 @@ vec4 operator- (const vec4&,const vec4&);
 vec4 operator+ (const vec4&,const vec4&);
 vec4 operator* (const double&,const vec4&);
 vec4 operator* (const vec4&,const double&);
-
+const double* operator&(const vec4&);
 
 class mat3{
 public:
@@ -117,6 +123,9 @@ public:
     vec3 y;
     vec3 z;
     
+
+    vec3 operator[](int);
+
     /**************************************************
         FUNCTIONS
     **************************************************/
@@ -145,6 +154,13 @@ public:
     // Expands the matrix to a 4x4 using zeros and a 1 in the bottom right (w.w)
     mat4 expand();
 
+    /**************************************************
+     * Instantiations
+    **************************************************/
+   static mat3 zeros();
+   static mat3 eye();
+   static mat3 ones();
+
 };
 
 // Operator overloads
@@ -152,7 +168,7 @@ mat3 operator*(const mat3&,const mat3&);
 vec3 operator*(const mat3&,const vec3&);
 mat3 operator-(const mat3&,const mat3&);
 mat3 operator+(const mat3&,const mat3&);
-
+const double* operator&(const mat3&);
 
 class mat4{
 public:
@@ -163,6 +179,8 @@ public:
     vec4 y;
     vec4 z;
     vec4 w;
+
+
 
     /**************************************************
         FUNCTIONS
@@ -175,6 +193,13 @@ public:
         CONVERSIONS
     **************************************************/
     mat3 shrink();
+
+    /**************************************************
+     * Instantiations
+    **************************************************/
+   static mat4 zeros();
+   static mat4 eye();
+   static mat4 ones();
 };
 
 // Operator overloads
@@ -182,7 +207,7 @@ mat4 operator*(const mat4&,const mat4&);
 vec4 operator*(const mat4&,const vec4&);
 mat4 operator-(const mat4&,const mat4&);
 mat4 operator+(const mat4&,const mat4&);
-
+const double* operator&(const mat4&);
 
 class quaternion{
 public:
@@ -224,6 +249,7 @@ public:
 };
 
 quaternion operator*(quaternion&, quaternion&);
+bool operator==(quaternion&, quaternion&);
 
 /******************************************************
  * 

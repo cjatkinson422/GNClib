@@ -10,6 +10,7 @@ linalg.o: linalg.cpp *.hpp
 
 executable: linalg.o UnitTest.o
 	g++ $(INC) -o UnitTest linalg.o UnitTest.o
+	ar rvs liblinalg.a linalg.o
 	./UnitTest
 
 clean: 

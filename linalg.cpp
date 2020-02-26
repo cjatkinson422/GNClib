@@ -32,6 +32,19 @@ void vec3::normalize(){
     }
 }
 
+vec3 vec3::normalize(vec3& v){
+    double s = sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+    vec3 ret;
+    if (s<1e-8){
+        ret.x=0.0; ret.y=0.0; ret.z=0.0;
+    }else{
+        ret.x = v.x/s;
+        ret.y = v.y/s;
+        ret.z = v.z/s;
+    }
+    return ret;
+}
+
 double vec3::length(){
     return sqrt(x*x + y*y + z*z);
 }
@@ -46,6 +59,10 @@ vec3 vec3::cross(const vec3& v1, const vec3& v2){
 
 double vec3::dot(const vec3& v1, const vec3& v2){
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+double vec3::getAngularDist(vec3& v1, vec3& v2){
+	return acos(dot(normalize(v1), normalize(v2)));
 }
 
 void vec3::print(){
@@ -108,6 +125,14 @@ vec3 operator*(const vec3& v, const double& s){
     r.y = v.y*s;
     r.z = v.z*s;
     return r;
+}
+const double* operator&(const vec3& v){
+    return &v.x;
+}
+
+double vec3::operator[](unsigned int i){
+    if(i>2) exit(-1);
+    return *(&x+i*sizeof(double));
 }
 
 /*****************************************************
@@ -199,6 +224,14 @@ vec4 operator*(const vec4& v, const double& s){
     r.w = v.w*s;
     return r;
 }
+const double* operator&(const vec4& v){
+    return &v.x;
+}
+double vec4::operator[](unsigned int i){
+    if(i>3) exit(-1);
+    return *(&x+i*sizeof(double));
+}
+
 /********************************************************
  
         MATRIX
@@ -338,6 +371,37 @@ mat3 operator+(const mat3& m1, const mat3& m2){
     mr.z = m2.z+m2.z;
     return mr;
 }
+const double* operator&(const mat3& m){
+    return &m.x;
+}
+vec3 mat3::operator[](unsigned int){
+    if(i>2) exit(-1);
+}
+
+/*****************************************************
+    MATRIX 3 INSTANTIATIONS
+*****************************************************/
+mat3 mat3::ones(){
+    mat3 ret;
+    ret.x = vec3(1.0,1.0,1.0);
+    ret.y = vec3(1.0,1.0,1.0);
+    ret.z = vec3(1.0,1.0,1.0);
+    return ret;
+}
+mat3 mat3::zeros(){
+    mat3 ret;
+    ret.x = vec3(0.0,0.0,0.0);
+    ret.y = vec3(0.0,0.0,0.0);
+    ret.z = vec3(0.0,0.0,0.0);
+    return ret;
+}
+mat3 mat3::eye(){
+    mat3 ret;
+    ret.x = vec3(1.0,0.0,0.0);
+    ret.y = vec3(0.0,1.0,0.0);
+    ret.z = vec3(0.0,0.0,1.0);
+    return ret;
+}
 
 /********************************************************
     MATRIX 4 METHODS
@@ -431,6 +495,37 @@ mat4 operator+(const mat4& m1, const mat4& m2){
     mr.w = m1.w+m2.w;
     return mr;
 }
+const double* operator&(const mat4& m){
+    return &m.x;
+}
+
+/*****************************************************
+    MATRIX 4 INSTANTIATIONS 
+*****************************************************/
+mat4 mat4::ones(){
+    mat4 ret;
+    ret.w = vec4(1.0,1.0,1.0,1.0);
+    ret.x = vec4(1.0,1.0,1.0,1.0);
+    ret.y = vec4(1.0,1.0,1.0,1.0);
+    ret.z = vec4(1.0,1.0,1.0,1.0);
+    return ret;
+}
+mat4 mat4::zeros(){
+    mat4 ret;
+    ret.w = vec4(0.0,0.0,0.0,0.0);
+    ret.x = vec4(0.0,0.0,0.0,0.0);
+    ret.y = vec4(0.0,0.0,0.0,0.0);
+    ret.z = vec4(0.0,0.0,0.0,0.0);
+    return ret;
+}
+mat4 mat4::eye(){
+    mat4 ret;
+    ret.w = vec4(1.0,0.0,0.0,0.0);
+    ret.x = vec4(0.0,1.0,0.0,0.0);
+    ret.y = vec4(0.0,0.0,1.0,0.0);
+    ret.z = vec4(0.0,0.0,0.0,1.0);
+    return ret;
+}
 
 /*****************************************************
  
@@ -510,6 +605,9 @@ quaternion operator*(quaternion& q1, quaternion q2){
     r.s = q1.s*q2.s - vec3::dot(q1.v,q2.v);
     r.v = q1.s*q2.v + q2.s*q1.v - vec3::cross(q2.v,q1.v);
     return r;
+}
+bool operator==(quaternion& q1, quaternion& q2){
+    return quaternion::testEquivalence(q1, q2);
 }
 
 /******************************************************
