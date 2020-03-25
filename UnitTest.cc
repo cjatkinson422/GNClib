@@ -1,5 +1,5 @@
 #include <iostream>
-#include "linalg.hpp"
+#include "linalg.hh"
 
 
 #define REDC "\033[91m"

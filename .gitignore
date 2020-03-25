@@ -1,0 +1,4 @@
+*.o
+linalg.a
+./UnitTest
+liblinalg.a

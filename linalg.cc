@@ -1,4 +1,4 @@
-#include "linalg.hpp"
+#include "linalg.hh"
 
 #define REDC "\033[91m"
 #define GREC "\033[92m"
@@ -15,6 +15,7 @@
 /*****************************************************
     VECTOR 3 METHODS
 *****************************************************/
+const vec3 vec3::unit_x = vec3(1.0,0.0,0.0);
 
 vec3::vec3(double argx, double argy, double argz){
     x=argx; y=argy; z=argz;
@@ -126,11 +127,11 @@ vec3 operator*(const vec3& v, const double& s){
     r.z = v.z*s;
     return r;
 }
-const double* operator&(const vec3& v){
+double* operator&(vec3& v){
     return &v.x;
 }
 
-double vec3::operator[](unsigned int i){
+double& vec3::operator[](unsigned int i){
     if(i>2) exit(-1);
     return *(&x+i*sizeof(double));
 }
@@ -224,10 +225,10 @@ vec4 operator*(const vec4& v, const double& s){
     r.w = v.w*s;
     return r;
 }
-const double* operator&(const vec4& v){
+double* operator&(vec4& v){
     return &v.x;
 }
-double vec4::operator[](unsigned int i){
+double& vec4::operator[](unsigned int i){
     if(i>3) exit(-1);
     return *(&x+i*sizeof(double));
 }
@@ -371,12 +372,12 @@ mat3 operator+(const mat3& m1, const mat3& m2){
     mr.z = m2.z+m2.z;
     return mr;
 }
-const double* operator&(const mat3& m){
+double* operator&(mat3& m){
     return &m.x;
 }
-vec3 mat3::operator[](unsigned int i){
+vec3& mat3::operator[](unsigned int i){
     if(i>2) exit(-1);
-    return *()
+    return *reinterpret_cast<vec3*>(&x+i*sizeof(double));
 }
 
 /*****************************************************
@@ -440,6 +441,10 @@ mat3 mat4::shrink(){
     return r;
 }
 
+std::array<float,16> mat4::gl_float_ref(){
+    return {(float)x.x,(float)x.y,(float)x.z,(float)x.w,(float)y.x,(float)y.y,(float)y.z,(float)y.w,(float)z.x,(float)z.y,(float)z.z,(float)z.w,(float)w.x,(float)w.y,(float)w.z,(float)w.w};
+}
+
 /********************************************************
     MATRIX OPERATOR OVERLOADS
 *********************************************************/
@@ -496,8 +501,14 @@ mat4 operator+(const mat4& m1, const mat4& m2){
     mr.w = m1.w+m2.w;
     return mr;
 }
-const double* operator&(const mat4& m){
+double* operator&(mat4& m){
     return &m.x;
+}
+
+vec4& mat4::operator[](unsigned int i){
+    if(i>3) exit(-1);
+    double* fsdf = (&x+i*sizeof(double));
+    return *reinterpret_cast<vec4*>(&x+i*sizeof(double));
 }
 
 /*****************************************************

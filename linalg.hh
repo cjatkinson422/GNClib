@@ -18,7 +18,7 @@ public:
     double y;
     double z;
 
-    double operator[](unsigned int);
+    double& operator[](unsigned int);
     
     // Default constructor
     vec3() : vec3(0.0,0.0,0.0){};
@@ -58,6 +58,10 @@ public:
 
     double getAngularDist(vec3& v1, vec3& v2);
 
+    static const vec3 unit_x;
+    static const vec3 unit_y;
+    static const vec3 unit_z;
+
 };
 // Operator overloads
 bool operator==(const vec3&,const vec3&);
@@ -66,7 +70,16 @@ vec3 operator+ (const vec3&,const vec3&);
 vec3 operator- (const vec3&,const vec3&);
 vec3 operator*(const double&,const vec3&);
 vec3 operator*(const vec3&,const double&);
-const double* operator&(const vec3&);
+double* operator&(vec3&);
+
+
+
+/*********************************************************************
+     
+     VEC 4 class
+
+*********************************************************************/
+
 
 class vec4{
 public:
@@ -75,7 +88,7 @@ public:
     double z;
     double w;
 
-    double operator[](unsigned int);
+    double& operator[](unsigned int);
     
     // Default constructor
     vec4() : vec4(0.0,0.0,0.0,0.0){};
@@ -114,7 +127,15 @@ vec4 operator- (const vec4&,const vec4&);
 vec4 operator+ (const vec4&,const vec4&);
 vec4 operator* (const double&,const vec4&);
 vec4 operator* (const vec4&,const double&);
-const double* operator&(const vec4&);
+double* operator&(vec4&);
+
+
+/*********************************************************************
+     
+    MAT 3 class
+
+*********************************************************************/
+
 
 class mat3{
 public:
@@ -126,7 +147,7 @@ public:
     vec3 z;
     
 
-    vec3 operator[](int);
+    vec3& operator[](unsigned int);
 
     /**************************************************
         FUNCTIONS
@@ -151,7 +172,6 @@ public:
     // Converts the matrix to a quaternion
     // Algorithm source: 
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-    // Please verify and make sure I didnt make any typos @AndrewMalatak
     quaternion toQuat();
     // Expands the matrix to a 4x4 using zeros and a 1 in the bottom right (w.w)
     mat4 expand();
@@ -172,6 +192,14 @@ mat3 operator-(const mat3&,const mat3&);
 mat3 operator+(const mat3&,const mat3&);
 const double* operator&(const mat3&);
 
+
+/*********************************************************************
+     
+     MAT 4 class
+
+*********************************************************************/
+
+
 class mat4{
 public:
     /**************************************************
@@ -182,6 +210,8 @@ public:
     vec4 z;
     vec4 w;
 
+    vec4& operator[](unsigned int);
+    std::array<float,16> gl_float_ref();
 
 
     /**************************************************
@@ -209,7 +239,7 @@ mat4 operator*(const mat4&,const mat4&);
 vec4 operator*(const mat4&,const vec4&);
 mat4 operator-(const mat4&,const mat4&);
 mat4 operator+(const mat4&,const mat4&);
-const double* operator&(const mat4&);
+double* operator&(mat4&);
 
 class quaternion{
 public:
@@ -236,7 +266,6 @@ public:
     // Converts the quaternion to a 3x3 matrix
     // Algorith source:
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
-    // Please verify and make sure I didnt make any typos @AndrewMalatak
     mat3 toMat3() const;
 
     // Prints the contents of the quaternion

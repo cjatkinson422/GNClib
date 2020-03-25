@@ -3,10 +3,10 @@ INC = -g -std=c++17
 
 default: executable
 
-UnitTest.o: UnitTest.cpp *.hpp
-	g++ -c $(INC) UnitTest.cpp
-linalg.o: linalg.cpp *.hpp
-	g++ -c $(INC) linalg.cpp
+UnitTest.o: UnitTest.cc *.hh
+	g++ -c $(INC) UnitTest.cc
+linalg.o: linalg.cc *.hh
+	g++ -c $(INC) linalg.cc
 
 executable: linalg.o UnitTest.o
 	g++ $(INC) -o UnitTest linalg.o UnitTest.o
