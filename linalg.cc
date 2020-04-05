@@ -1,4 +1,5 @@
 #include "linalg.hh"
+#include "quaternion.hh"
 
 #define REDC "\033[91m"
 #define GREC "\033[92m"
@@ -16,14 +17,18 @@
     VECTOR 3 METHODS
 *****************************************************/
 const vec3 vec3::unit_x = vec3(1.0,0.0,0.0);
+const vec3 vec3::unit_y = vec3(0.0,1.0,0.0);
+const vec3 vec3::unit_z = vec3(0.0,0.0,1.0);
 
 vec3::vec3(double argx, double argy, double argz){
     x=argx; y=argy; z=argz;
 }
-
+vec3 operator-(const vec3& v){
+    return {-v.x,-v.y,-v.z};
+}
 void vec3::normalize(){
     double s = sqrt(x*x + y*y + z*z);
-    if(s<1e-8){
+    if(s<1e-10){
         x=0.0; y=0.0; z=0.0;
     }
     else{
@@ -97,7 +102,18 @@ bool operator!=(const vec3& v1, const vec3& v2){
     else
         return true;
 }
-
+vec3& operator+=(vec3& a, const vec3& b){
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    return a;
+}
+vec3& operator-=(vec3& a, const vec3& b){
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    return a;
+}
 vec3 operator+(const vec3& v1, const vec3&v2){
     vec3 r;
     r.x = v1.x+v2.x;
@@ -127,13 +143,20 @@ vec3 operator*(const vec3& v, const double& s){
     r.z = v.z*s;
     return r;
 }
+vec3 operator/(const vec3& v, const double& s){
+    vec3 r;
+    r.x = v.x/s;
+    r.y = v.y/s;
+    r.z = v.z/s;
+    return r;
+}
 double* operator&(vec3& v){
     return &v.x;
 }
 
 double& vec3::operator[](unsigned int i){
     if(i>2) exit(-1);
-    return *(&x+i*sizeof(double));
+    return *(&x+i);
 }
 
 /*****************************************************
@@ -209,6 +232,20 @@ vec4 operator-(const vec4& v1, const vec4& v2){
     r.w = v1.w-v2.w;
     return r;
 }
+vec4& operator+=(vec4& a, const vec4& b){
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    a.w += b.w;
+    return a;
+}
+vec4& operator-=(vec4& a, const vec4& b){
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    a.w -= b.w;
+    return a;
+}
 vec4 operator*(const double& s, const vec4& v){
     vec4 r;
     r.x = v.x*s;
@@ -230,7 +267,7 @@ double* operator&(vec4& v){
 }
 double& vec4::operator[](unsigned int i){
     if(i>3) exit(-1);
-    return *(&x+i*sizeof(double));
+    return *(&x+i);
 }
 
 /********************************************************
@@ -377,7 +414,7 @@ double* operator&(mat3& m){
 }
 vec3& mat3::operator[](unsigned int i){
     if(i>2) exit(-1);
-    return *reinterpret_cast<vec3*>(&x+i*sizeof(double));
+    return *reinterpret_cast<vec3*>(&x+i*3);
 }
 
 /*****************************************************
@@ -431,6 +468,13 @@ mat4 mat4::transpose(){
     r.w.z = z.w;
     r.w.w = w.w;
     return r;
+}
+
+void mat4::print(){
+    x.println();
+    y.println();
+    z.println();
+    w.println();
 }
 
 mat3 mat4::shrink(){
@@ -504,123 +548,42 @@ mat4 operator+(const mat4& m1, const mat4& m2){
 double* operator&(mat4& m){
     return &m.x;
 }
-
 vec4& mat4::operator[](unsigned int i){
     if(i>3) exit(-1);
-    double* fsdf = (&x+i*sizeof(double));
-    return *reinterpret_cast<vec4*>(&x+i*sizeof(double));
+    return *reinterpret_cast<vec4*>(&x+i*4);
 }
 
 /*****************************************************
     MATRIX 4 INSTANTIATIONS 
 *****************************************************/
 mat4 mat4::ones(){
-    mat4 ret;
-    ret.w = vec4(1.0,1.0,1.0,1.0);
-    ret.x = vec4(1.0,1.0,1.0,1.0);
-    ret.y = vec4(1.0,1.0,1.0,1.0);
-    ret.z = vec4(1.0,1.0,1.0,1.0);
+    mat4 ret ={
+        {1.0,1.0,1.0,1.0},
+        {1.0,1.0,1.0,1.0},
+        {1.0,1.0,1.0,1.0},
+        {1.0,1.0,1.0,1.0}
+    };
     return ret;
 }
 mat4 mat4::zeros(){
-    mat4 ret;
-    ret.w = vec4(0.0,0.0,0.0,0.0);
-    ret.x = vec4(0.0,0.0,0.0,0.0);
-    ret.y = vec4(0.0,0.0,0.0,0.0);
-    ret.z = vec4(0.0,0.0,0.0,0.0);
+    mat4 ret ={
+        {0.0,0.0,0.0,0.0},
+        {0.0,0.0,0.0,0.0},
+        {0.0,0.0,0.0,0.0},
+        {0.0,0.0,0.0,0.0}
+    };
     return ret;
 }
 mat4 mat4::eye(){
-    mat4 ret;
-    ret.w = vec4(1.0,0.0,0.0,0.0);
-    ret.x = vec4(0.0,1.0,0.0,0.0);
-    ret.y = vec4(0.0,0.0,1.0,0.0);
-    ret.z = vec4(0.0,0.0,0.0,1.0);
+    mat4 ret ={
+        {1.0,0.0,0.0,0.0},
+        {0.0,1.0,0.0,0.0},
+        {0.0,0.0,1.0,0.0},
+        {0.0,0.0,0.0,1.0}
+    };
     return ret;
 }
 
-/*****************************************************
- 
-    QUATERNION METHODS
-
-*****************************************************/
-
-quaternion::quaternion(double s, double x, double y, double z){
-    this->s = s;
-    this->v.x = x;
-    this->v.y = y;
-    this->v.z = z;
-}
-
-quaternion::quaternion(const vec3& vec, double angle, bool degrees){
-    if(degrees)
-        angle = deg2rad(angle);
-    
-    angle /= 2.0;
-    s = cos(angle);
-    v = vec*sin(angle);
-}
-
-void quaternion::normalize(){
-    double val = sqrt(s*s + v.x*v.x + v.y*v.y + v.z*v.z);
-    s/=val;
-    v.x/=val;
-    v.y/=val;
-    v.z/=val;
-}
-
-// Rotate a vector using the quaternion
-vec3 quaternion::rotate (const vec3& to_rotate)const{
-    return 2.0*vec3::dot(v,to_rotate)*v + (s*s - vec3::dot(v,v))*to_rotate + 2.0*s*vec3::cross(v,to_rotate);
-}
-
-mat3 quaternion::toMat3()const{
-    mat3 r;
-
-    r.x.x = 1.0 - 2.0*v.y*v.y - 2.0*v.z*v.z;
-    r.x.y = 2.0*v.x*v.y - 2.0*v.z*s;
-    r.x.z = 2.0*v.x*v.z + 2.0*v.y*s;
-
-    r.y.x = 2.0*v.x*v.y + 2.0*v.z*s;
-    r.y.y = 1.0 - 2.0*v.x*v.x - 2.0*v.z*v.z;
-    r.y.z = 2.0*v.y*v.z - 2.0*v.x*s;
-
-    r.z.x = 2.0*v.x*v.z - 2.0*v.y*s;
-    r.z.y = 2.0*v.y*v.z + 2.0*v.x*s;
-    r.z.z = 1.0 - 2.0*v.x*v.x - 2.0*v.y*v.y;
-
-    r.orthonormalize();
-    return r;
-}
-
-void quaternion::print()const{
-    printf(REDC "x:"  ENDC " %f, " GREC "y:" ENDC " %f, " BLUC "z:" ENDC " %f, " YELC "w:" ENDC " %f", v.x, v.y, v.z, s);
-}
-
-void quaternion::println()const{
-    printf(REDC "x:"  ENDC " %f, " GREC "y:" ENDC " %f, " BLUC "z:" ENDC " %f, " YELC "s:" ENDC " %f\n", v.x, v.y, v.z, s);
-}
-
-bool quaternion::testEquivalence(const quaternion& q1, const quaternion& q2){
-    vec3 v_base(1.0,1.0,1.0);
-    vec3 v_rot1 = q1.rotate(v_base);
-    vec3 v_rot2 = q2.rotate(v_base);
-    return (v_rot1 == v_rot2);
-}
-
-/*****************************************************
-    QUATERNION OPERATOR OVERLOADS
-*****************************************************/
-
-quaternion operator*(quaternion& q1, quaternion q2){
-    quaternion r;
-    r.s = q1.s*q2.s - vec3::dot(q1.v,q2.v);
-    r.v = q1.s*q2.v + q2.s*q1.v - vec3::cross(q2.v,q1.v);
-    return r;
-}
-bool operator==(quaternion& q1, quaternion& q2){
-    return quaternion::testEquivalence(q1, q2);
-}
 
 /******************************************************
  * 

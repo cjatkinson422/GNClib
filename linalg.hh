@@ -4,13 +4,13 @@
 #include <math.h>
 #include <iostream>
 
-#define PI 3.14159265358979323846264
-
-class vec3;
-class vec4;
-class mat3;
-class mat4;
 class quaternion;
+class mat4;
+class mat3;
+class vec4;
+class vec3;
+
+#define PI 3.14159265358979323846264
 
 class vec3{
 public:
@@ -32,11 +32,8 @@ public:
         z=dat[2];
     }
 
-    // Gets the data in the form of a std::array
-    std::array<double,3> get() {
-       return {x,y,z};
-    }
-
+    // Negative Operator. returns the vectors negative
+    friend vec3 operator-(const vec3&);
     // Normalizes this vector.
     void normalize();
     static vec3 normalize(vec3&);
@@ -67,9 +64,12 @@ public:
 bool operator==(const vec3&,const vec3&);
 bool operator!=(const vec3&,const vec3&);
 vec3 operator+ (const vec3&,const vec3&);
+vec3& operator+=(vec3&, const vec3&);
+vec3& operator-=(vec3&, const vec3&);
 vec3 operator- (const vec3&,const vec3&);
 vec3 operator*(const double&,const vec3&);
 vec3 operator*(const vec3&,const double&);
+vec3 operator/(const vec3&,const double&);
 double* operator&(vec3&);
 
 
@@ -102,7 +102,7 @@ public:
         z=dat[2];
         w=dat[3];
     }
-    // Gets the data in the form of a pointer
+    // Gets the data in the form of an array
     std::array<double,4> get() {
        return {x,y,z,w};
     }
@@ -125,6 +125,8 @@ bool operator==(const vec4&,const vec4&);
 bool operator!=(const vec4&,const vec4&);
 vec4 operator- (const vec4&,const vec4&);
 vec4 operator+ (const vec4&,const vec4&);
+vec4& operator+=(vec4&, const vec4&);
+vec4& operator-=(vec4&, const vec4&);
 vec4 operator* (const double&,const vec4&);
 vec4 operator* (const vec4&,const double&);
 double* operator&(vec4&);
@@ -211,13 +213,14 @@ public:
     vec4 w;
 
     vec4& operator[](unsigned int);
-    std::array<float,16> gl_float_ref();
 
 
     /**************************************************
         FUNCTIONS
     **************************************************/
     mat4 transpose();
+
+    std::array<float,16> gl_float_ref();
 
     void print();
 
@@ -241,46 +244,7 @@ mat4 operator-(const mat4&,const mat4&);
 mat4 operator+(const mat4&,const mat4&);
 double* operator&(mat4&);
 
-class quaternion{
-public:
-    double s = 1.0;
-    vec3 v;
 
-
-    // Default constructor 
-    quaternion() : quaternion(0.0,0.0,0.0,1.0){};
-
-    // Axis angle constructor
-    quaternion(const vec3&, double, bool degrees = false);
-
-    // Quaternion constructor
-    // Format is (S,Vx,Vy,Vz)
-    quaternion(double,double,double,double);
-
-    // Normalize the quaternion
-    void normalize();
-
-    // Rotate a vector using the quaternion
-    vec3 rotate (const vec3& to_rotate) const;
-
-    // Converts the quaternion to a 3x3 matrix
-    // Algorith source:
-    // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
-    mat3 toMat3() const;
-
-    // Prints the contents of the quaternion
-    void print() const;
-
-    // Prints the contents of the quaternion with a newline terminator
-    void println() const;
-
-    // Tests the equivalence of two quaternions by rotating a vector (1,1,1)
-    // using the two quaternions and then checks if the rotated vectors are the same
-    static bool testEquivalence(const quaternion&, const quaternion&);
-};
-
-quaternion operator*(quaternion&, quaternion&);
-bool operator==(quaternion&, quaternion&);
 
 /******************************************************
  * 
@@ -293,3 +257,9 @@ const double rad2deg(double);
 
 // Converts degrees to radians
 const double deg2rad(double);
+
+/******************************************************
+ * 
+ *  TEMPLATED FUNCTIONS
+ * 
+******************************************************/

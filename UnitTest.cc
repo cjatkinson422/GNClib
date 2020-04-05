@@ -1,5 +1,6 @@
 #include <iostream>
 #include "linalg.hh"
+#include "quaternion.hh"
 
 
 #define REDC "\033[91m"
@@ -92,7 +93,11 @@ int main(){
         mat3 M = q1.toMat3();
         quaternion q2 = M.toQuat();
 
-        if(!quaternion::testEquivalence(q1,q2)){
+        vec3 vv1 = q1.rotate(vec3(1.0,0.0,0.0));
+        vec3 vv2 = M*vec3(1.0,0.0,0.0);
+        vec3 vv3 = q2.rotate(vec3(1.0,0.0,0.0));
+
+        if(!quaternion::testEquivalence(q1,q2)  ||  (vv1 - vv2).length() > 0.0001  ||  (vv3 - vv2).length() > 0.0001){
             printf(REDC "ERROR" ENDC ":: Failed Z quaternion to DCM and DCM to quaternion check! %f\n",i);
             fail = true;
             break;
@@ -116,9 +121,42 @@ int main(){
         }
     }
 
+
+    mat4 mat_1 = {
+        {1.0, 2.0, 3.0, 2.0},
+        {0.0, 1.0, 3.0, 6.0},
+        {4.0, 0.0, 5.5, 2.0},
+        {4.0, 8.0, 0.0, 0.0}
+    };
+
+    mat4 mat_2 = {
+        {7.0, 1.0, 5.0, 6.0},
+        {0.0, 1.0, 3.0, 2.0},
+        {3.0, 0.0, 4.0, 2.0},
+        {1.0, 0.0, 4.0, 0.0}
+    };
+
+    mat4 res = mat_1 * mat_2;
+    mat4 exp = {
+        {18.0, 3.0, 31.0, 16.0},
+        {15.0, 1.0, 39.0, 8.0},
+        {46.5, 4.0, 50.0, 35.0},
+        {28.0, 12.0, 44.0, 40.0}
+    };
+
+    for(int i = 0; i < 4; i ++){
+        for(int j = 0; j < 4; j++){
+            if(res[i][j]-exp[i][j] > 1.0e-10){
+                printf(REDC "ERROR" ENDC ":: Failed mat4 mutliplication and [] operator check!\n");
+                fail = true;
+                break;
+            }
+        }
+    }
+    std::cout << sizeof(std::array<float,4>) << " " << sizeof(float) << std::endl;
     // Print to screen if all unit tests successful
     if(!fail){
         printf(GREC "Passed all unit tests!\n" ENDC);
     }
-    return 0;    
+    return 0;
 }
