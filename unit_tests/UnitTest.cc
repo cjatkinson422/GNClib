@@ -1,7 +1,7 @@
 #include <iostream>
-#include "linalg.hh"
-#include "quaternion.hh"
-
+#include "../linalg.hh"
+#include "../quaternion.hh"
+#include "quaternion_utest.hh"
 
 #define REDC "\033[91m"
 #define GREC "\033[92m"
@@ -153,7 +153,12 @@ int main(){
             }
         }
     }
-    std::cout << sizeof(std::array<float,4>) << " " << sizeof(float) << std::endl;
+    
+    
+
+    // Run the quaternion unit tests
+    quaternion_unit_tests();
+
     // Print to screen if all unit tests successful
     if(!fail){
         printf(GREC "Passed all unit tests!\n" ENDC);

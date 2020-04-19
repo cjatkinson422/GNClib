@@ -38,7 +38,7 @@ void vec3::normalize(){
     }
 }
 
-vec3 vec3::normalize(vec3& v){
+vec3 vec3::normalize(const vec3& v){
     double s = sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
     vec3 ret;
     if (s<1e-8){
@@ -82,6 +82,9 @@ void vec3::println(){
 vec4 vec3::expand(double w){
     vec4 v(x,y,z,w);
     return v;
+}
+std::array<float,3> vec3::gl_float_ref() const{
+    return {(float)x, (float)y, (float)z};
 }
 
 /*****************************************************
@@ -485,7 +488,7 @@ mat3 mat4::shrink(){
     return r;
 }
 
-std::array<float,16> mat4::gl_float_ref(){
+std::array<float,16> mat4::gl_float_ref() const{
     return {(float)x.x,(float)x.y,(float)x.z,(float)x.w,(float)y.x,(float)y.y,(float)y.z,(float)y.w,(float)z.x,(float)z.y,(float)z.z,(float)z.w,(float)w.x,(float)w.y,(float)w.z,(float)w.w};
 }
 
@@ -544,9 +547,6 @@ mat4 operator+(const mat4& m1, const mat4& m2){
     mr.z = m2.z+m2.z;
     mr.w = m1.w+m2.w;
     return mr;
-}
-double* operator&(mat4& m){
-    return &m.x;
 }
 vec4& mat4::operator[](unsigned int i){
     if(i>3) exit(-1);

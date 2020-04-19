@@ -13,18 +13,17 @@
 
 *****************************************************/
 
-quaternion::quaternion(double s, double x, double y, double z){
-    this->s = s;
+quaternion::quaternion(double x, double y, double z, double s){
     this->v.x = x;
     this->v.y = y;
     this->v.z = z;
+    this->s = s;
 }
 quaternion::quaternion(const vec4& vec){
-    this->s = vec.w;
     this->v.x = vec.x;
     this->v.y = vec.y;
     this->v.z = vec.z;
-
+    this->s = vec.w;
 }
 
 quaternion::quaternion(const vec3& vec, double angle, bool degrees){
@@ -34,12 +33,11 @@ quaternion::quaternion(const vec3& vec, double angle, bool degrees){
     angle /= 2.0;
     s = cos(angle);
     v = vec*sin(angle);
-    this->normalize();
 }
 
 void quaternion::normalize(){
     double val = sqrt(s*s + v.x*v.x + v.y*v.y + v.z*v.z);
-    if(val > 1.0e-8){
+    if(val > 1.0e-13){
         s/=val;
         v.x/=val;
         v.y/=val;
@@ -54,7 +52,7 @@ void quaternion::normalize(){
 }
 
 quaternion quaternion::conj(){
-    return {s,-v.x,-v.y,-v.z};
+    return {-v.x,-v.y,-v.z, s};
 }
 
 // Rotate a vector using the quaternion
@@ -109,7 +107,7 @@ quaternion operator*(const quaternion& q1, const quaternion& q2){
 bool operator==(quaternion& q1, quaternion& q2){
     return quaternion::testEquivalence(q1, q2);
 }
-
+/*
 quaternion operator*(const mat4& m, const quaternion& v){
     quaternion r;
     r.v.x = m.x.x*v.v.x + m.x.y*v.v.y + m.x.z*v.v.z + m.x.w*v.s;
@@ -117,7 +115,7 @@ quaternion operator*(const mat4& m, const quaternion& v){
     r.v.z = m.z.x*v.v.x + m.z.y*v.v.y + m.z.z*v.v.z + m.z.w*v.s;
     r.s   = m.w.x*v.v.x + m.w.y*v.v.y + m.w.z*v.v.z + m.w.w*v.s;
     return r;
-}
+}*/
 
 quaternion operator*(const double& s, const quaternion& v){
     quaternion r;
